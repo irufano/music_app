@@ -22,8 +22,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    _pageManager.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -37,6 +44,7 @@ class _MyAppState extends State<MyApp> {
                     progress: value.current,
                     buffered: value.buffered,
                     total: value.total,
+                    onSeek: _pageManager.seek,
                   );
                 },
               ),
@@ -55,13 +63,13 @@ class _MyAppState extends State<MyApp> {
                       return IconButton(
                         icon: Icon(Icons.play_arrow),
                         iconSize: 32.0,
-                        onPressed: () {},
+                        onPressed: _pageManager.play,
                       );
                     case ButtonState.playing:
                       return IconButton(
                         icon: Icon(Icons.pause),
                         iconSize: 32.0,
-                        onPressed: () {},
+                        onPressed: _pageManager.pause,
                       );
                   }
                 },
