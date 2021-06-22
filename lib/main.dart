@@ -30,14 +30,41 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               Spacer(),
-              ProgressBar(
-                progress: Duration.zero,
-                total: Duration.zero,
+              ValueListenableBuilder<ProgressBarState>(
+                valueListenable: _pageManager.progressNotifier,
+                builder: (_, value, __) {
+                  return ProgressBar(
+                    progress: value.current,
+                    buffered: value.buffered,
+                    total: value.total,
+                  );
+                },
               ),
-              IconButton(
-                icon: Icon(Icons.play_arrow),
-                iconSize: 32.0,
-                onPressed: () {},
+              ValueListenableBuilder<ButtonState>(
+                valueListenable: _pageManager.buttonNotifier,
+                builder: (_, value, __) {
+                  switch (value) {
+                    case ButtonState.loading:
+                      return Container(
+                        margin: EdgeInsets.all(8.0),
+                        width: 32.0,
+                        height: 32.0,
+                        child: CircularProgressIndicator(),
+                      );
+                    case ButtonState.paused:
+                      return IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        iconSize: 32.0,
+                        onPressed: () {},
+                      );
+                    case ButtonState.playing:
+                      return IconButton(
+                        icon: Icon(Icons.pause),
+                        iconSize: 32.0,
+                        onPressed: () {},
+                      );
+                  }
+                },
               ),
             ],
           ),
