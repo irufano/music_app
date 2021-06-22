@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:music_app/simple_player/simple_player.dart';
+
+import 'background_player/background_player.dart';
+import 'simple_player/simple_player.dart';
 
 void main() {
   runApp(MyApp());
 }
-
+  
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -49,8 +51,8 @@ class _MyHomeState extends State<MyHome> {
             ElevatedButton(
               child: Text('Background Player'),
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SimplePlayer()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BackgroundPlayer()));
               },
             ),
           ],
