@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
 import 'background_player/background_player.dart';
@@ -6,7 +7,7 @@ import 'simple_player/simple_player.dart';
 void main() {
   runApp(MyApp());
 }
-  
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -21,7 +22,7 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Colors.deepPurple,
         primarySwatch: Colors.deepPurple,
       ),
-      home: MyHome(),
+      home: AudioServiceWidget(child: MyHome()),
     );
   }
 }

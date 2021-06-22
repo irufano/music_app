@@ -31,7 +31,10 @@ dependencies:
   just_audio: ^0.8.0
   audio_video_progress_bar: ^0.4.0
   audio_service: ^0.17.1
+  audio_session: ^0.1.5
+  flutter_tts: ^3.1.0
   http: ^0.13.3
+  rxdart: ^0.27.1
 
 dev_dependencies:
   flutter_test:
