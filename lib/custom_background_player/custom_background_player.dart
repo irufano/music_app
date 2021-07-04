@@ -26,6 +26,21 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
             Image.network(
                 'https://www.carplaylife.com/wp-content/uploads/QMUSIC-APP.jpg'),
             Spacer(),
+            // title
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(bottom: 10, top: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Title',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  Text('Speaker'),
+                ],
+              ),
+            ),
             // A seek bar.
             SeekBar(
               duration: Duration.zero,
