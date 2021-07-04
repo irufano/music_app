@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app/custom_background_player/custom_background_player.dart';
 
 import 'background_player/background_player.dart';
 import 'simple_player/simple_player.dart';
@@ -38,25 +39,46 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              child: Text('Simple Player'),
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SimplePlayer()));
-              },
-            ),
-            ElevatedButton(
-              child: Text('Background Player'),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BackgroundPlayer()));
-              },
-            ),
-          ],
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        width: double.infinity,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  child: Text('Simple Player'),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SimplePlayer()));
+                  },
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  child: Text('Background Player'),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BackgroundPlayer()));
+                  },
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  child: Text('Custom Background Player'),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => CustomBackgroundPlayer()));
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
