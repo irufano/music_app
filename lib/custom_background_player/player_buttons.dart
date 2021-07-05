@@ -64,14 +64,16 @@ Widget stopButton(BuildContext context) => Material(
       ),
     );
 
-Widget skipPreviousButton(BuildContext context) => IconButton(
+Widget skipPreviousButton(BuildContext context, {Function()? onPressed}) =>
+    IconButton(
       icon: Icon(Icons.skip_previous_rounded),
       iconSize: 48.0,
-      onPressed: AudioService.skipToPrevious,
+      onPressed: onPressed,
     );
 
-Widget skipNextButton(BuildContext context) => IconButton(
+Widget skipNextButton(BuildContext context, {Function()? onPressed}) =>
+    IconButton(
       icon: Icon(Icons.skip_next_rounded),
       iconSize: 48.0,
-      onPressed: AudioService.skipToPrevious,
+      onPressed: onPressed,
     );

@@ -77,6 +77,21 @@ class _MyHomeState extends State<MyHome> {
                   },
                 ),
               ),
+
+              // // Display the notification click status.
+              // StreamBuilder<bool>(
+              //   stream: AudioService.notificationClickEventStream,
+              //   builder: (context, snapshot) {
+              //     if (snapshot.data == true) {
+              //       Navigator.of(context).push(MaterialPageRoute(
+              //           fullscreenDialog: true,
+              //           builder: (context) => CustomBackgroundPlayer()));
+              //     }
+              //     return Text(
+              //       'Notification Click Status: ${snapshot.data}',
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),
