@@ -58,36 +58,40 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
                         child: CircularProgressIndicator(),
                       );
                     } else
-                      return Stack(
+                      return Column(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height < 800
-                                  ? 0
-                                  : MediaQuery.of(context).size.height / 18,
-                            ),
-                            child: StreamBuilder<QueueState>(
-                                stream: playerStream.queueStateStream,
-                                builder: (context, snapshot) {
-                                  final queueState = snapshot.data;
-                                  final mediaItem = queueState?.mediaItem;
+                          Spacer(),
+                          StreamBuilder<QueueState>(
+                            stream: playerStream.queueStateStream,
+                            builder: (context, snapshot) {
+                              final queueState = snapshot.data;
+                              final mediaItem = queueState?.mediaItem;
 
-                                  var imageUrl = mediaItem?.artUri != null
-                                      ? mediaItem!.artUri
-                                      : null;
+                              var imageUrl = mediaItem?.artUri != null
+                                  ? mediaItem!.artUri
+                                  : null;
 
-                                  if (imageUrl == null)
-                                    return Image.network(
-                                      'https://www.carplaylife.com/wp-content/uploads/QMUSIC-APP.jpg',
-                                      height: MediaQuery.of(context).size.width,
-                                    );
-                                  else
-                                    return Image.network(
-                                      imageUrl.origin + imageUrl.path,
-                                      height: MediaQuery.of(context).size.width,
-                                    );
-                                }),
+                              if (imageUrl == null)
+                                return Container(
+                                  color: Theme.of(context).primaryColor,
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.width - 32,
+                                  child: Center(
+                                      child: Icon(
+                                    Icons.mic_outlined,
+                                    color: Colors.white,
+                                    size: MediaQuery.of(context).size.width / 3,
+                                  )),
+                                );
+                              else
+                                return Image.network(
+                                  imageUrl.origin + imageUrl.path,
+                                  height: MediaQuery.of(context).size.width,
+                                );
+                            },
                           ),
+                          Spacer(),
 
                           // controller
                           Align(
@@ -222,36 +226,37 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
                                         );
                                       }),
                                   SizedBox(height: 8.0),
-                                  // Display the processing state.
-                                  StreamBuilder<AudioProcessingState>(
-                                    stream: AudioService.playbackStateStream
-                                        .map((state) => state.processingState)
-                                        .distinct(),
-                                    builder: (context, snapshot) {
-                                      final processingState = snapshot.data ??
-                                          AudioProcessingState.none;
-                                      return Text(
-                                          "Processing state: ${describeEnum(processingState)}");
-                                    },
-                                  ),
-                                  // Display the latest custom event.
-                                  StreamBuilder(
-                                    stream: AudioService.customEventStream,
-                                    builder: (context, snapshot) {
-                                      return Text(
-                                          "custom event: ${snapshot.data}");
-                                    },
-                                  ),
-                                  // Display the notification click status.
-                                  StreamBuilder<bool>(
-                                    stream: AudioService
-                                        .notificationClickEventStream,
-                                    builder: (context, snapshot) {
-                                      return Text(
-                                        'Notification Click Status: ${snapshot.data}',
-                                      );
-                                    },
-                                  ),
+
+                                  // // Display the processing state.
+                                  // StreamBuilder<AudioProcessingState>(
+                                  //   stream: AudioService.playbackStateStream
+                                  //       .map((state) => state.processingState)
+                                  //       .distinct(),
+                                  //   builder: (context, snapshot) {
+                                  //     final processingState = snapshot.data ??
+                                  //         AudioProcessingState.none;
+                                  //     return Text(
+                                  //         "Processing state: ${describeEnum(processingState)}");
+                                  //   },
+                                  // ),
+                                  // // Display the latest custom event.
+                                  // StreamBuilder(
+                                  //   stream: AudioService.customEventStream,
+                                  //   builder: (context, snapshot) {
+                                  //     return Text(
+                                  //         "custom event: ${snapshot.data}");
+                                  //   },
+                                  // ),
+                                  // // Display the notification click status.
+                                  // StreamBuilder<bool>(
+                                  //   stream: AudioService
+                                  //       .notificationClickEventStream,
+                                  //   builder: (context, snapshot) {
+                                  //     return Text(
+                                  //       'Notification Click Status: ${snapshot.data}',
+                                  //     );
+                                  //   },
+                                  // ),
                                 ],
                               ),
                             ),
