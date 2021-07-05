@@ -102,7 +102,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     MediaItem media;
     if (queueMediaItems.contains(mediaItem)) {
       media = MediaItem(
-        id: (queueMediaItems.length + 1).toString(),
+        id: DateTime.now().toIso8601String(),
         album: mediaItem.album,
         title: mediaItem.title,
         artist: mediaItem.artist,
