@@ -1,7 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:music_app/custom_background_player/audio_player_task.dart';
 
 import 'media_state.dart';
 import 'player_buttons.dart';
@@ -19,20 +18,6 @@ class CustomBackgroundPlayer extends StatefulWidget {
 class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
   @override
   void initState() {
-    // start service
-    AudioService.start(
-      backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
-      androidNotificationChannelName: 'Audio Service Demo',
-      // Enable this if you want the Android service to exit the foreground state on pause.
-      //androidStopForegroundOnPause: true,
-      androidNotificationColor: 0xFF2196f3,
-      androidNotificationIcon: 'mipmap/ic_launcher',
-      androidEnableQueue: true,
-      androidStopForegroundOnPause: true,
-      androidNotificationClickStartsActivity: true,
-    );
-    // add dynamic queue:
-    // AudioService.addQueueItem(m);
     super.initState();
   }
 
@@ -58,7 +43,6 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
             final audioServiceRunning = snapshot.data ?? false;
 
             if (!audioServiceRunning) {
-              Navigator.pop(context);
               return Center(child: Text("Audio service is not running"));
             } else {
               return StreamBuilder<AudioProcessingState>(
@@ -181,6 +165,9 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
                                         final queueState = snapshot.data;
                                         final queue = queueState?.queue ?? [];
                                         final mediaItem = queueState?.mediaItem;
+
+                                        print(
+                                            '--- queue length : ${queue.length} ---');
 
                                         return Row(
                                           mainAxisAlignment:

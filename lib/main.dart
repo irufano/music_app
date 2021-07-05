@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:music_app/custom_background_player/custom_background_player.dart';
+import 'package:music_app/custom_background_player/list_media_item_page.dart';
 
 import 'background_player/background_player.dart';
 import 'simple_player/simple_player.dart';
@@ -71,9 +71,12 @@ class _MyHomeState extends State<MyHome> {
                 child: ElevatedButton(
                   child: Text('Custom Background Player'),
                   onPressed: () {
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     fullscreenDialog: true,
+                    //     builder: (context) => CustomBackgroundPlayer()));
                     Navigator.of(context).push(MaterialPageRoute(
                         fullscreenDialog: true,
-                        builder: (context) => CustomBackgroundPlayer()));
+                        builder: (context) => ListMediaItemPage()));
                   },
                 ),
               ),
