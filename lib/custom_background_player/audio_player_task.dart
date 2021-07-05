@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_app/custom_background_player/seeker.dart';
 
@@ -23,11 +22,12 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onStart(Map<String, dynamic>? params) async {
     print('running...');
-    // We configure the audio session for speech since we're playing a podcast.
-    // You can also put this in your app's initialisation if your app doesn't
-    // switch between two types of audio as this example does.
-    final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.speech());
+    // // We configure the audio session for speech since we're playing a podcast.
+    // // You can also put this in your app's initialisation if your app doesn't
+    // // switch between two types of audio as this example does.
+    // final session = await AudioSession.instance;
+    // await session.configure(AudioSessionConfiguration.speech());
+    
     // Broadcast media item changes.
     _player.currentIndexStream.listen((index) {
       if (index != null) AudioServiceBackground.setMediaItem(queue[index]);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'audio_player_task.dart';
 import 'custom_background_player.dart';
 import 'media_library.dart';
+import 'playlist_page.dart';
 
 class ListMediaItemPage extends StatefulWidget {
   const ListMediaItemPage({Key? key}) : super(key: key);
@@ -19,14 +20,22 @@ class _ListMediaItemPageState extends State<ListMediaItemPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('List Podcasts'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => PlaylistPage()));
+            },
+            icon: Icon(Icons.playlist_play),
+          )
+        ],
       ),
       body: StreamBuilder<AudioProcessingState>(
           stream: AudioService.playbackStateStream
               .map((state) => state.processingState)
               .distinct(),
           builder: (context, snapshot) {
-            final processingState = snapshot.data ?? AudioProcessingState.none;
-
             return Container(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               child: ListView.separated(
@@ -36,12 +45,13 @@ class _ListMediaItemPageState extends State<ListMediaItemPage> {
                     return ListTile(
                       title: Text(_mediaLibrary.items[index].title),
                       subtitle: Text(_mediaLibrary.items[index].artist!),
-                      trailing: Text(
-                          RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                                  .firstMatch(
-                                      "${_mediaLibrary.items[index].duration}")
-                                  ?.group(1) ??
-                              '${_mediaLibrary.items[index].duration}'),
+                      trailing: IconButton(
+                          onPressed: () async {
+                            // update dynamic queue:
+                            await AudioService.updateMediaItem(
+                                _mediaLibrary.items[index]);
+                          },
+                          icon: Icon(Icons.add)),
                       onTap: () async {
                         Navigator.of(context).push(MaterialPageRoute(
                             fullscreenDialog: true,
@@ -60,15 +70,9 @@ class _ListMediaItemPageState extends State<ListMediaItemPage> {
                           androidNotificationClickStartsActivity: true,
                         );
 
-                        if (processingState == AudioProcessingState.ready) {
-                          // update dynamic queue:
-                          await AudioService.updateMediaItem(
-                              _mediaLibrary.items[index]);
-                        } else {
-                          // add dynamic queue:
-                          await AudioService.addQueueItem(
-                              _mediaLibrary.items[index]);
-                        }
+                        // add dynamic queue:
+                        await AudioService.addQueueItem(
+                            _mediaLibrary.items[index]);
                       },
                     );
                   }),

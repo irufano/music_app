@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app/custom_background_player/playlist_page.dart';
 
 import 'media_state.dart';
 import 'player_buttons.dart';
@@ -26,6 +27,16 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Custom Background Player'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => PlaylistPage()));
+            },
+            icon: Icon(Icons.playlist_play),
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
