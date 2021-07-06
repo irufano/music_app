@@ -238,18 +238,18 @@ class _CustomBackgroundPlayerState extends State<CustomBackgroundPlayer> {
                                       }),
                                   SizedBox(height: 8.0),
 
-                                  // // Display the processing state.
-                                  // StreamBuilder<AudioProcessingState>(
-                                  //   stream: AudioService.playbackStateStream
-                                  //       .map((state) => state.processingState)
-                                  //       .distinct(),
-                                  //   builder: (context, snapshot) {
-                                  //     final processingState = snapshot.data ??
-                                  //         AudioProcessingState.none;
-                                  //     return Text(
-                                  //         "Processing state: ${describeEnum(processingState)}");
-                                  //   },
-                                  // ),
+                                  // Display the processing state.
+                                  StreamBuilder<AudioProcessingState>(
+                                    stream: AudioService.playbackStateStream
+                                        .map((state) => state.processingState)
+                                        .distinct(),
+                                    builder: (context, snapshot) {
+                                      final processingState = snapshot.data ??
+                                          AudioProcessingState.none;
+                                      return Text(
+                                          "Processing state: ${describeEnum(processingState)}");
+                                    },
+                                  ),
                                   // // Display the latest custom event.
                                   // StreamBuilder(
                                   //   stream: AudioService.customEventStream,

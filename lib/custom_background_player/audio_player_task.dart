@@ -13,7 +13,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   late StreamSubscription<PlaybackEvent> _eventSubscription;
   List<MediaItem> queueMediaItems = [];
 
-  late ConcatenatingAudioSource _playlist;
+  var _playlist;
 
   List<MediaItem> get queue => queueMediaItems;
   int? get index => _player.currentIndex;
@@ -27,10 +27,12 @@ class AudioPlayerTask extends BackgroundAudioTask {
     // // switch between two types of audio as this example does.
     // final session = await AudioSession.instance;
     // await session.configure(AudioSessionConfiguration.speech());
-    
+
     // Broadcast media item changes.
     _player.currentIndexStream.listen((index) {
-      if (index != null) AudioServiceBackground.setMediaItem(queue[index]);
+      print('index : $index ---------');
+      if (index != null && queue.length != 0)
+        AudioServiceBackground.setMediaItem(queue[index]);
     });
     // Propagate all events from the audio player to AudioService clients.
     _eventSubscription = _player.playbackEventStream.listen((event) {
@@ -52,42 +54,17 @@ class AudioPlayerTask extends BackgroundAudioTask {
           break;
       }
     });
-
-    // // Load and broadcast the queue
-    // AudioServiceBackground.setQueue(queue);
-    // try {
-    //   await _player.setAudioSource(ConcatenatingAudioSource(
-    //     children:
-    //         queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
-    //   ));
-    //   // In this example, we automatically start playing on start.
-    //   onPlay();
-    // } catch (e) {
-    //   print("Error: $e");
-    //   onStop();
-    // }
   }
 
-  // dynamic queue eg. from api
+  // single playing without queue
   @override
-  Future<void> onAddQueueItem(MediaItem mediaItem) async {
-    // queue.add(mediaItem); or somthing like this to update your queue
-    queueMediaItems.clear();
-    queueMediaItems.add(mediaItem);
-    await AudioServiceBackground.setQueue(queueMediaItems);
-    try {
-      // create playlist
-      _playlist = ConcatenatingAudioSource(
-          children: queueMediaItems
-              .asMap()
-              .map((index, item) => MapEntry(
-                    index,
-                    AudioSource.uri(Uri.parse(item.extras!['source'])),
-                  ))
-              .values
-              .toList());
+  Future<void> onPlayMediaItem(MediaItem mediaItem) async {
+    await AudioServiceBackground.setMediaItem(mediaItem);
 
-      await _player.setAudioSource(_playlist);
+    try {
+      await _player.setAudioSource(
+        AudioSource.uri(Uri.parse(mediaItem.extras!['source'])),
+      );
 
       // In this example, we automatically start playing on start.
       onPlay();
@@ -97,22 +74,65 @@ class AudioPlayerTask extends BackgroundAudioTask {
     }
   }
 
+  // single playing with queue
+  @override
+  Future<void> onAddQueueItem(MediaItem mediaItem) async {
+    MediaItem media = MediaItem(
+      id: DateTime.now().toIso8601String(),
+      album: mediaItem.album,
+      title: mediaItem.title,
+      artist: mediaItem.artist,
+      duration: mediaItem.duration,
+      artUri: mediaItem.artUri,
+      extras: {"source": mediaItem.extras!['source']},
+    );
+
+    queueMediaItems.clear();
+    queueMediaItems.add(media);
+    await AudioServiceBackground.setQueue(queueMediaItems);
+    try {
+      if (_playlist == null) {
+        // create playlist
+        _playlist = ConcatenatingAudioSource(
+            children: queueMediaItems
+                .asMap()
+                .map((index, item) => MapEntry(
+                      index,
+                      AudioSource.uri(Uri.parse(item.extras!['source'])),
+                    ))
+                .values
+                .toList());
+
+        await _player.setAudioSource(_playlist);
+      } else {
+        // _playlist is exist
+        // single playing
+        await _playlist.clear();
+        await _playlist
+            .add(AudioSource.uri(Uri.parse(media.extras!['source'])));
+        await _player.setAudioSource(_playlist);
+      }
+
+      // In this example, we automatically start playing on start.
+      onPlay();
+    } catch (e) {
+      print("Error: $e");
+      onStop();
+    }
+  }
+
+  // update queue when have queue
   @override
   Future<void> onUpdateMediaItem(MediaItem mediaItem) async {
-    MediaItem media;
-    if (queueMediaItems.contains(mediaItem)) {
-      media = MediaItem(
-        id: DateTime.now().toIso8601String(),
-        album: mediaItem.album,
-        title: mediaItem.title,
-        artist: mediaItem.artist,
-        duration: mediaItem.duration,
-        artUri: mediaItem.artUri,
-        extras: {"source": mediaItem.extras!['source']},
-      );
-    } else {
-      media = mediaItem;
-    }
+    MediaItem media = MediaItem(
+      id: DateTime.now().toIso8601String(),
+      album: mediaItem.album,
+      title: mediaItem.title,
+      artist: mediaItem.artist,
+      duration: mediaItem.duration,
+      artUri: mediaItem.artUri,
+      extras: {"source": mediaItem.extras!['source']},
+    );
 
     queueMediaItems.add(media);
     await AudioServiceBackground.setQueue(queueMediaItems);

@@ -38,6 +38,8 @@ class _ListMediaItemPageState extends State<ListMediaItemPage> {
             .map((state) => state.processingState)
             .distinct(),
         builder: (context, snapshot) {
+          // final processingState = snapshot.data ?? AudioProcessingState.none;
+
           return Stack(
             children: [
               Container(
@@ -70,14 +72,22 @@ class _ListMediaItemPageState extends State<ListMediaItemPage> {
                             //androidStopForegroundOnPause: true,
                             androidNotificationColor: 0xFF2196f3,
                             androidNotificationIcon: 'mipmap/ic_launcher',
-                            androidEnableQueue: true,
+                            androidEnableQueue: false,
                             androidStopForegroundOnPause: true,
                             androidNotificationClickStartsActivity: true,
                           );
 
+                          // if (processingState == AudioProcessingState.ready)
+                          //   // update dynamic queue:
+                          //   await AudioService.updateMediaItem(
+                          //       _mediaLibrary.items[index]);
+                          // else
                           // add dynamic queue:
                           await AudioService.addQueueItem(
                               _mediaLibrary.items[index]);
+
+                          // await AudioService.playMediaItem(
+                          //     _mediaLibrary.items[index]);
                         },
                       );
                     }),

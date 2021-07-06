@@ -2,7 +2,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:music_app/custom_background_player/list_media_item_page.dart';
 
-import 'background_player/background_player.dart';
 import 'simple_player/simple_player.dart';
 
 void main() {
@@ -56,16 +55,16 @@ class _MyHomeState extends State<MyHome> {
                   },
                 ),
               ),
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  child: Text('Background Player'),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BackgroundPlayer()));
-                  },
-                ),
-              ),
+              // Container(
+              //   width: double.infinity,
+              //   child: ElevatedButton(
+              //     child: Text('Background Player'),
+              //     onPressed: () {
+              //       Navigator.of(context).push(MaterialPageRoute(
+              //           builder: (context) => BackgroundPlayer()));
+              //     },
+              //   ),
+              // ),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
